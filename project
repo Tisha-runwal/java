@@ -378,6 +378,359 @@ footer {
     text-align: center;
 }
 
+//project 2
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String toString() {
+        return "Title: " + title + ", Author: " + author + ", ISBN: " + isbn;
+    }
+}
+
+class BookManager {
+    private ArrayList<Book> books;
+
+    public BookManager() {
+        this.books = new ArrayList<>();
+    }
+
+    public void addBook(String title, String author, String isbn) {
+        Book newBook = new Book(title, author, isbn);
+        books.add(newBook);
+        System.out.println("Book added successfully.");
+    }
+
+    public void viewAllBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+        } else {
+            System.out.println("Listing all books:");
+            for (Book book : books) {
+                System.out.println(book);
+            }
+        }
+    }
+
+    public void searchBookByTitle(String title) {
+        boolean found = false;
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                System.out.println("Book found: " + book);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No book found with the title: " + title);
+        }
+    }
+
+    public void removeBookByTitle(String title) {
+        boolean removed = false;
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                books.remove(book);
+                System.out.println("Book removed: " + book);
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("No book found with the title: " + title);
+        }
+    }
+}
+
+public class BookManagementSystem {
+    private static Scanner scanner = new Scanner(System.in);
+    private static BookManager bookManager = new BookManager();
+
+    public static void main(String[] args) {
+        while (true) {
+            showMenu();
+            int choice = getUserChoice();
+            executeChoice(choice);
+        }
+    }
+
+    private static void showMenu() {
+        System.out.println("\nBook Management System");
+        System.out.println("1. Add a book");
+        System.out.println("2. View all books");
+        System.out.println("3. Search book by title");
+        System.out.println("4. Remove a book");
+        System.out.println("5. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    private static int getUserChoice() {
+        int choice = -1;
+        while (choice < 1 || choice > 5) {
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > 5) {
+                    System.out.print("Invalid choice. Please choose between 1 and 5: ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number between 1 and 5: ");
+            }
+        }
+        return choice;
+    }
+
+    private static void executeChoice(int choice) {
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                bookManager.viewAllBooks();
+                break;
+            case 3:
+                searchBook();
+                break;
+            case 4:
+                removeBook();
+                break;
+            case 5:
+                System.out.println("Exiting system. Goodbye!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid choice. Try again.");
+        }
+    }
+
+    private static void addBook() {
+        System.out.print("Enter book title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter author name: ");
+        String author = scanner.nextLine();
+        System.out.print("Enter ISBN number: ");
+        String isbn = scanner.nextLine();
+        bookManager.addBook(title, author, isbn);
+    }
+
+    private static void searchBook() {
+        System.out.print("Enter the book title to search: ");
+        String title = scanner.nextLine();
+        bookManager.searchBookByTitle(title);
+    }
+
+    private static void removeBook() {
+        System.out.print("Enter the title of the book to remove: ");
+        String title = scanner.nextLine();
+        bookManager.removeBookByTitle(title);
+    }
+}
+
+//project 3
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Task {
+    private String name;
+    private boolean isCompleted;
+
+    public Task(String name) {
+        this.name = name;
+        this.isCompleted = false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void markCompleted() {
+        isCompleted = true;
+    }
+
+    public void markIncomplete() {
+        isCompleted = false;
+    }
+
+    @Override
+    public String toString() {
+        return (isCompleted ? "[Completed] " : "[Pending] ") + name;
+    }
+}
+
+class ToDoList {
+    private ArrayList<Task> tasks;
+
+    public ToDoList() {
+        tasks = new ArrayList<>();
+    }
+
+    public void addTask(String taskName) {
+        tasks.add(new Task(taskName));
+        System.out.println("Task added: " + taskName);
+    }
+
+    public void removeTask(String taskName) {
+        boolean taskFound = false;
+        for (Task task : tasks) {
+            if (task.getName().equalsIgnoreCase(taskName)) {
+                tasks.remove(task);
+                System.out.println("Task removed: " + taskName);
+                taskFound = true;
+                break;
+            }
+        }
+        if (!taskFound) {
+            System.out.println("Task not found: " + taskName);
+        }
+    }
+
+    public void markTaskCompleted(String taskName) {
+        for (Task task : tasks) {
+            if (task.getName().equalsIgnoreCase(taskName)) {
+                task.markCompleted();
+                System.out.println("Task marked as completed: " + taskName);
+                return;
+            }
+        }
+        System.out.println("Task not found: " + taskName);
+    }
+
+    public void markTaskIncomplete(String taskName) {
+        for (Task task : tasks) {
+            if (task.getName().equalsIgnoreCase(taskName)) {
+                task.markIncomplete();
+                System.out.println("Task marked as incomplete: " + taskName);
+                return;
+            }
+        }
+        System.out.println("Task not found: " + taskName);
+    }
+
+    public void viewAllTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            System.out.println("Your Tasks:");
+            for (Task task : tasks) {
+                System.out.println(task);
+            }
+        }
+    }
+}
+
+public class ToDoApp {
+    private static Scanner scanner = new Scanner(System.in);
+    private static ToDoList toDoList = new ToDoList();
+
+    public static void main(String[] args) {
+        while (true) {
+            showMenu();
+            int choice = getUserChoice();
+            executeChoice(choice);
+        }
+    }
+
+    private static void showMenu() {
+        System.out.println("\nTo-Do List Application");
+        System.out.println("1. Add Task");
+        System.out.println("2. View All Tasks");
+        System.out.println("3. Mark Task as Completed");
+        System.out.println("4. Mark Task as Incomplete");
+        System.out.println("5. Remove Task");
+        System.out.println("6. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    private static int getUserChoice() {
+        int choice = -1;
+        while (choice < 1 || choice > 6) {
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > 6) {
+                    System.out.print("Invalid choice. Please choose between 1 and 6: ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number between 1 and 6: ");
+            }
+        }
+        return choice;
+    }
+
+    private static void executeChoice(int choice) {
+        switch (choice) {
+            case 1:
+                addTask();
+                break;
+            case 2:
+                toDoList.viewAllTasks();
+                break;
+            case 3:
+                markTaskCompleted();
+                break;
+            case 4:
+                markTaskIncomplete();
+                break;
+            case 5:
+                removeTask();
+                break;
+            case 6:
+                System.out.println("Exiting application. Goodbye!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid choice. Try again.");
+        }
+    }
+
+    private static void addTask() {
+        System.out.print("Enter task name: ");
+        String taskName = scanner.nextLine();
+        toDoList.addTask(taskName);
+    }
+
+    private static void markTaskCompleted() {
+        System.out.print("Enter task name to mark as completed: ");
+        String taskName = scanner.nextLine();
+        toDoList.markTaskCompleted(taskName);
+    }
+
+    private static void markTaskIncomplete() {
+        System.out.print("Enter task name to mark as incomplete: ");
+        String taskName = scanner.nextLine();
+        toDoList.markTaskIncomplete(taskName);
+    }
+
+    private static void removeTask() {
+        System.out.print("Enter task name to remove: ");
+        String taskName = scanner.nextLine();
+        toDoList.removeTask(taskName);
+    }
+}
 
 
 
